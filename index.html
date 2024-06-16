@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Tracker</title>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <h1>Vehicle Tracker</h1>
+    <ul id="positions"></ul>
+    <ul id="alerts"></ul>
+
+    <script>
+        const socket = io();
+
+        socket.on('position', (data) => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `Vehicle ${data.vehicleId} is at (${data.position.lat}, ${data.position.lon}) at ${new Date(data.timestamp).toLocaleTimeString()}`;
+            document.getElementById('positions').appendChild(listItem);
+        });
+
+        socket.on('alert', (data) => {
+            const alertItem = document.createElement('li');
+            alertItem.textContent = `ALERT: ${data.message} at ${new Date().toLocaleTimeString()}`;
+            document.getElementById('alerts').appendChild(alertItem);
+        });
+    </script>
+</body>
+</html>
